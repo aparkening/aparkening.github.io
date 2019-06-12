@@ -7,7 +7,7 @@ permalink:  tea_shopper_cli_gem
 
 My command line interface (CLI) Ruby gem student project, Tea Shopper, scrapes tea data from the web and allows users to compare teas by name, price per ounce, and tea shop. When the user chooses a tea, it displays specific details, such as purchase URL, flavors, region, and description. Check out the [short demonstration video](https://www.loom.com/share/5d3cc369d7c243d4af5e665206b39a75).
 
-<img src="https://github.com/aparkening/tea_shopper/raw/master/assets/Tea_Shopper-welcome.png" alt="Tea Shopper welcome screen" />
+![](https://github.com/aparkening/tea_shopper/tree/master/assets/Tea_Shopper-welcome.png" alt="Tea Shopper welcome screen)
 
 ## Why
 
