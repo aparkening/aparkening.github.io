@@ -1,13 +1,13 @@
 ---
 layout: post
 title:      "Tea Shopper CLI Gem"
-date:       2019-06-12 02:01:36 +0000
+date:       2019-06-11 22:01:37 -0400
 permalink:  tea_shopper_cli_gem
 ---
 
-My command line interface (CLI) Ruby gem student project, Tea Shopper, scrapes tea data from the web and allow users to compare teas by name, price per ounce, and tea shop. When the user chooses a tea, it displays specific details, such as purchase URL, flavors, region, and description. Check out the [short demonstration video](https://www.loom.com/share/5d3cc369d7c243d4af5e665206b39a75).
+My command line interface (CLI) Ruby gem student project, Tea Shopper, scrapes tea data from the web and allows users to compare teas by name, price per ounce, and tea shop. When the user chooses a tea, it displays specific details, such as purchase URL, flavors, region, and description. Check out the [short demonstration video](https://www.loom.com/share/5d3cc369d7c243d4af5e665206b39a75).
 
-![](https://github.com/aparkening/tea_shopper/blob/master/assets/Tea_Shopper-welcome.png)
+<img src="https://github.com/aparkening/tea_shopper/blob/master/assets/Tea_Shopper-welcome.png" alt="Tea Shopper welcome screen" />
 
 ## Why
 
@@ -34,19 +34,26 @@ After those big decisions, I iterated on core functionality, working out display
 ## Lessons Learned
 
 ### Console FTW
+
 This project has helped cement the usefulness of the console for object oriented debugging. Ruby object oriented code has felt much more difficult to test than procedural Ruby because I always need to build objects before getting to the root of any logic bugs involving those objects. In this project, I began manually assigning objects, like `assam = Tea.new`. But I quickly learned that the console do these things for me if I wrote some helper methods. 
 
-All of a sudden, I could type `test_scrape` and have access to my full `Tea.all` array that was populated by the latest scraped data! 
+All of a sudden, I could type `test_build` and have access to my full `Tea.all` array that was populated by the latest scraped data! 
 
 ```
-def test_scrape
-	tea_array = TeaShopper::SongScraper.scrape_teas # Initial scrape
-	TeaShopper::Tea.create_from_collection(tea_array) # Create Tea objects
-	tea_array.each do |tea| 
-		attributes = TeaShopper::SongScraper.scrape_profile_page(tea.url) # Scrape detail pages
-	  tea.add_tea_attributes(attributes) # Add scraped attributes to Tea objects
+# Test initial Tea object build 
+def test_build
+  tea_array = TeaShopper::SongScraper.scrape_teas
+  TeaShopper::Tea.create_from_collection(tea_array)
+  TeaShopper::Tea.all
+end
+
+# Add all attributes to array
+def test_attributes
+  TeaShopper::Tea.all.each do |tea|
+    attributes = TeaShopper::SongScraper.scrape_profile_page(tea.url)
+    tea.add_tea_attributes(attributes)
   end
-	Tea.all # Display full Tea array
+  TeaShopper::Tea.all
 end
 ```
 
@@ -67,7 +74,9 @@ end
 ```
 
 ### ALL THE THINGS
+
 Another thing I learned during this project was to slow. down. In the first couple days of coding, I was so excited to build this cool vision that I wrote multiple methods and classes at the same time, resulting in bundled git commits and bundled bugs. I didn't feel comfortable rolling back commits because they included functionality that I didn't want to lose, so I had to manually go through each line of code across my classes and methods to recreate and solve the issues. After correcting that mess, I resolved to take smaller steps, setting 25-minute timers for focused functionality, and to commit incremental changes often. There were still commits with multiple changes, but both my commit log and my overall progress were much steadier, with fewer errors and frustrations.
 
 ## The End
-Overall, this was a really fun project. I loved getting to build and see something that came out of my own imagination! I loved watching the evolution of the code itself, moving from messy drafts to more polished, elegant methods. And I loved establishing my own coding style, continuing with strategies that were working, ditching strategies that were difficult to maintain, and getting deeper into the whys behind some of the coding methodologies that we've already learned at Flatiron. I'm excited to make Tea Shopper even better in the future!st goes here.
+
+Overall, this was a really fun project. I loved getting to build and see something that came out of my own imagination! I loved watching the evolution of the code itself, moving from messy drafts to more polished, elegant methods. And I loved establishing my own coding style, continuing with strategies that were working, ditching strategies that were difficult to maintain, and getting deeper into the whys behind some of the coding methodologies that we've already learned at Flatiron. I'm excited to make Tea Shopper even better in the future!
