@@ -1,11 +1,11 @@
 # Site settings
 author: Aaron Parkening
-title: 
+title: Adventures in Code
 header-img: img/home-bg.png
 email: aaron.parkening@gmail.com
 copyright_name: Aaron Parkening
 description: > # this means to ignore newlines until "baseurl:"
-  
+  What I've discovered during my Flatiron coding experience
 baseurl: "" # the subpath of your site, e.g. /blog
 twitter_username: 
 github_username:  aparkening
