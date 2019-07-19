@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Send: Simple Word, Complex Uses"
-date:       2019-07-19 20:55:35 +0000
+date:       2019-07-19 16:55:36 -0400
 permalink:  send_simple_word_complex_uses
 ---
 
