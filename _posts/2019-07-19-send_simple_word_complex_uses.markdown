@@ -93,7 +93,7 @@ end
 
 Boom, I can replace all my conditionals with a single `send`! Not only do I have less code to maintain, but I have more flexibility to dynamically modify `MiterSaw` with minimal fuss. Now the `MiterSaw` class can be updated or extended with more cut types without touching the `Wall` class or any of its objects!
 
-## Time-Out, What Even is Going On Here
+## Time-Out, What Even Is Going On Here
 `@mitersaw.send(type, *arguments)` looks simple, so what's actually happening?
 
 1. `Send` is an instance method available to all objects. In this case, it's acting on the `@mitersaw` object. 
