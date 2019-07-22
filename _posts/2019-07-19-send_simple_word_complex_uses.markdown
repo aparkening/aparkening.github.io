@@ -91,7 +91,7 @@ class Wall
 end
 ```
 
-Boom, I can replace all my conditionals with a single `send`! Not only do I have less code to maintain, but I have more flexibility to dynamically modify `MiterSaw` with minimal fuss. Now the `MiterSaw` class can simply inherit, or be extended with more cut types, without touching the `Wall` class or any of its objects!
+Boom, I can replace all my conditionals with a single `send`! Not only do I have less code to maintain, but I have more flexibility to dynamically modify `MiterSaw` with minimal fuss. Now the `MiterSaw` class can be updated or extended with more cut types without touching the `Wall` class or any of its objects!
 
 ## Time-Out, What Even is Going On Here
 `@mitersaw.send(type, *arguments)` looks simple, so what's actually happening?
