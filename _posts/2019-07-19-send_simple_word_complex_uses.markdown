@@ -109,8 +109,8 @@ I'm always looking for ways to make my code more abstract and robust, with less 
 
 
 ### More places to learn about `send`:
-- http://ruby-metaprogramming.rubylearning.com/html/ruby_metaprogramming_2.html
-- http://rubymonk.com/learning/books/2-metaprogramming-ruby/chapters/32-introduction-to-metaprogramming/lessons/75-being-meta
-- https://stackoverflow.com/questions/3337285/what-does-send-do-in-ruby
-- https://ruby-doc.org/core-2.6.3/Object.html#method-i-send
-- https://iamchrissmith.io/ruby-send-method-exploration
+- [http://ruby-metaprogramming.rubylearning.com/html/ruby_metaprogramming_2.html](http://ruby-metaprogramming.rubylearning.com/html/ruby_metaprogramming_2.html)
+- [http://rubymonk.com/learning/books/2-metaprogramming-ruby/chapters/32-introduction-to-metaprogramming/lessons/75-being-meta](http://rubymonk.com/learning/books/2-metaprogramming-ruby/chapters/32-introduction-to-metaprogramming/lessons/75-being-meta)
+- [https://stackoverflow.com/questions/3337285/what-does-send-do-in-ruby](https://stackoverflow.com/questions/3337285/what-does-send-do-in-ruby)
+- https://ruby-doc.org/core-2.6.3/Object.html#method-i-send(https://ruby-doc.org/core-2.6.3/Object.html#method-i-send)
+- https://iamchrissmith.io/ruby-send-method-exploration(https://iamchrissmith.io/ruby-send-method-exploration)
