@@ -33,7 +33,7 @@ end
 I thought that `send` was such an elegant solution for managing unknown attributes that I wanted to go deeper. Where else could `send` save me time and effort?
 
 ## So Many Conditionals
-When referencing a class with multiple methods, it's been easy to turn to conditional structures like `if/else` and `case` to execute the appropriate code. If I want to build a call using a miter saw, for example, I can use `case` to determine when to make various cuts.
+When referencing a class with multiple methods, it's been easy to turn to conditional structures like `if/else` and `case` to execute the appropriate code. If I want to build a wall using a miter saw, for example, I can use `case` to determine when to make various cuts.
 
 ```
 class MiterSaw
