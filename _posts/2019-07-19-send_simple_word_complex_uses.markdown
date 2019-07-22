@@ -77,7 +77,7 @@ north_wall.cut("miter", [1, 2], [4, 6])
 This gets the job done; my north wall can get several saw cuts. But to access more `MiterSaw` methods that rip along the grain or make a sliding compound cut, for example, I need to update _both_ the `Wall` class and the `MiterSaw` class. That gets messy quickly when I scale the program to have a crew building many houses at once. 
 
 ## My Hero
-It turns out that `send` can help by introducing very helpful metaprogramming to my explicit `case` statement.
+It turns out that `send` can help by introducing metaprogramming to my explicit `case` statement.
 
 ```
 class Wall
