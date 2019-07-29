@@ -97,10 +97,10 @@ Boom, I can replace all my conditionals with a single `send`! Not only do I have
 `@mitersaw.send(type, *arguments)` looks simple, so what's actually happening?
 
 1. `Send` is an instance method available to all objects. In this case, it's acting on the `@mitersaw` object. 
-2. The `type` argument that we're feeding to `send` is actually _another method_. `Send` takes in methods as arguments. 
+2. The `type` argument that we're feeding to `send` is actually _the name of another method_. `Send` takes in method names as arguments. 
 3. `*arguments` are the additional arguments that `#type` needs to execute various `MiterSaw` methods, such as `#bevel`.
 
-We're _sending_ another method (`type`) to our `@mitersaw` object. 
+We're _sending_ another method name (`type`) to our `@mitersaw` object. 
 
 And our object doesn't need to know the method we're sending before the program runs, so we can change `MiterSaw` right up until we run an instance of `Wall`.
 
