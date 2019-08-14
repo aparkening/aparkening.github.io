@@ -1,7 +1,7 @@
 ---
 layout: post
-title:      "Draft Post on Tea Taster"
-date:       2019-08-14 23:39:29 +0000
+title:      "Tea Taster Sinatra App"
+date:       2019-08-14 19:39:30 -0400
 permalink:  draft_post_on_tea_taster
 ---
 
