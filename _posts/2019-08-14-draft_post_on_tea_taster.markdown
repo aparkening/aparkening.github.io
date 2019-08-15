@@ -29,10 +29,10 @@ The basic interface worked: anyone could view notes and shops, and authenticated
 So I mapped out the new model, thinking that Tea would mostly replace Note in how it related to Shop and User; it would probably take a day, tops. And instead it completely changed how all the models related to one another! Notes now belonged to Tea, Shop now had many Teas, and User could have many Teas, through Notes. My brain was going in circles, so wrote out a quick shorthand to keep next to me as I was building and modifying all my routes:
 
 **Old Models**
-> User has many notes
-> Shop has and belongs to many notes
-> Note belongs to user
-> Note has and belongs to many shops
+> - User has many notes
+> - Shop has and belongs to many notes
+> - Note belongs to user
+> - Note has and belongs to many shops
 
 **New Models**
 > **User:**
@@ -64,7 +64,7 @@ In the end, it took _many_ days to account for the new relationship in my models
 
 With Tea in the mix, the app interaction is much cleaner and clearer. It's much easier to understand how notes, shops, and teas interact with one another than when notes were adrift and could have multiple shops attached.
 
-### Committing often can be Painful
+### Committing Often can be Painful
 
 A key takeaway from my last student project was to slow down, to make one change at a time. I mostly stuck to that idea this time around, but I noticed that it took 5 minutes of git adding and committing for every 20 minutes of coding. I kept losing my train of thought for what to do next when breaking to commit my changes. And when I spotted a bug that impacted multiple files, I struggled with whether to commit all of the files at once or one at a time. I'm glad for the constant backup for my work, but I still have plenty of room to improve my git workflow!
 
