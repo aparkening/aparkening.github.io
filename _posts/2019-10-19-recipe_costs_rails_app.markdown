@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Recipe Costs Rails App"
-date:       2019-10-19 20:08:22 +0000
+date:       2019-10-19 16:08:22 -0400
 permalink:  recipe_costs_rails_app
 ---
 
@@ -23,12 +23,12 @@ While starting out as a standard join only containing the *Recipe* and *Ingredie
 Smack in the middle of my super join high, however, I hit a wall. Models for app-wide *Ingredient* and user-specific *UserIngredientCost* are lovely, but how was the app going to know which of these ingredients to feed into each recipe?
 
 ### Tables Tables Tables
-My first thought was to have *Recipe* only relate to *UserIngredient*; not *Ingredient*. That would mean that each `user_ingredient` table would start out as a duplicate of the entire `ingredient` table. Which might be fine for five users, but what about 1,000, or 100,000? And what happens when a new item is added to the `ingredient` table? Would I need to sync `ingredient` and `user_ingredient` every day? That seemed like a lot of unnecessary duplicate data and hassle -- there had to be a better way!
+My first thought was to have *Recipe* only relate to *UserIngredientCost*; not *Ingredient*. That would mean that each `user_ingredient` table would start out as a duplicate of the entire `ingredient` table. Which might be fine for five users, but what about 1,000, or 100,000? And what happens when a new item is added to the `ingredient` table? Would I need to sync `ingredient` and `user_ingredient` every day? That seemed like a lot of unnecessary duplicate data and hassle -- there had to be a better way!
 
-I wanted to keep app-wide *Ingredient* data and *UserIngredient* data separate, so I noodled this over with my cohort lead. An idea emerged: what if the solution didn't have to be in the database? What if another *object* could operate between *Ingredient* and *UserIngredient*, providing a recipe with *UserIngredient* data when it existed, but otherwise providing *Ingredient* data? That would mean much smaller `user_ingredient` tables while giving users access to the latest app-wide *Ingredient* data.
+I wanted to keep app-wide *Ingredient* data and *UserIngredientCost* data separate, so I noodled this over with my cohort lead. An idea emerged: what if the solution didn't have to be in the database? What if another *object* could operate between *Ingredient* and *UserIngredientCost*, providing a recipe with *UserIngredientCost* data when it existed, but otherwise providing *Ingredient* data? That would mean much smaller `user_ingredient` tables while giving users access to the latest app-wide *Ingredient* data.
 
 ### The Ingredient Glue
-And it worked! The new *CombinedIngredient* object just needed data from the *RecipeIngredient* super join to find everything needed from *User*, *UserIngredient*, and *Ingredient*. And it combined all the right data per instance, so *CombinedIngredient* was always pulling the latest data from all tables. 
+And it worked! The new *CombinedIngredient* object just needed data from the *RecipeIngredient* super join to find everything needed from *User*, *UserIngredientCost*, and *Ingredient*. And it combined all the right data per instance, so *CombinedIngredient* was always pulling the latest data from all tables. 
 
 ** model diagram **
 ![](https://github.com/aparkening/recipe_costs/blob/master/public/images/recipe-costs-data-models.png?raw=true)
