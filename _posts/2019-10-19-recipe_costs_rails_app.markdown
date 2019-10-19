@@ -30,7 +30,6 @@ I wanted to keep app-wide *Ingredient* data and *UserIngredientCost* data separa
 ### The Ingredient Glue
 And it worked! The new *CombinedIngredient* object just needed data from the *RecipeIngredient* super join to find everything needed from *User*, *UserIngredientCost*, and *Ingredient*. And it combined all the right data per instance, so *CombinedIngredient* was always pulling the latest data from all tables. 
 
-** model diagram **
 ![](https://github.com/aparkening/recipe_costs/blob/master/public/images/recipe-costs-data-models.png?raw=true)
 
 ### Even Better
