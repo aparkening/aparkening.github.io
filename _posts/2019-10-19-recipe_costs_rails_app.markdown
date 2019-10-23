@@ -13,7 +13,7 @@ Professional kitchens need to know their recipe costs to profitably price their 
 - Recipe costs are calculated per recipe and per serving. 
 - Ingredient conversions are automatic. Recipe amounts entered as cups will  seamlessly take advantage of costs entered as liters or gallons, for example.
 - App-wide ingredients and default costs provide faster recipe creation, and users can customize ingredient prices for their own recipes.
-- Users can browse their recipes by ingredient or grouped in their own user-created categories.
+- Users can browse their full recipe list or recipes by ingredient.
 
 ## Models
 After working out the concept, I mapped the data models... and kept at it for many days, trying to sort out what data belonged to a user, how each recipe related to a user and ingredients, etc. The six models that store key data were pretty straightforward: *User, Recipe, Ingredient, Category, UserIngredientCost*, and *WeightVolumeConversions*. And the initial modeled relationships between *Category* and *Recipe* (*CategoryRecipe*), and *Recipe* and *Ingredient* (*RecipeIngredient*) weren't too tricky to figure out, either.
