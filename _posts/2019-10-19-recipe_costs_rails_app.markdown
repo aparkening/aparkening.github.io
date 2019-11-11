@@ -16,7 +16,7 @@ Professional kitchens need to know their recipe costs to profitably price their 
 - Users can browse their full recipe list or recipes by ingredient.
 
 ## Models
-After working out the concept, I mapped the data models... and kept at it for many days, trying to sort out what data belonged to a user, how each recipe related to a user and ingredients, etc. The six models that store key data were pretty straightforward: *User, Recipe, Ingredient, UserIngredientCost*, and *WeightVolumeConversions*. And the initial modeled relationships between *Recipe* and *Ingredient* (*RecipeIngredient*) weren't too tricky to figure out, either.
+After working out the concept, I mapped the data models... and kept at it for many days, trying to sort out what data belonged to a user, how each recipe related to a user and ingredients, etc. The five models that store key data were pretty straightforward: *User, Recipe, Ingredient, UserIngredientCost*, and *WeightVolumeConversions*. And the initial modeled relationship between *Recipe* and *Ingredient* (*RecipeIngredient*) wasn't too tricky to figure out, either.
 
 While starting out as a standard join only containing the *Recipe* and *Ingredient* `id`s, I realized that *RecipeIngredient* could also model the specific ingredient amounts and units needed by each recipe. By adding columns for `ingredient_amount` and `ingredient_unit`, kept the join while reducing the need for yet another join table. I created a *super join*!
 
