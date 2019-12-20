@@ -1,7 +1,7 @@
 ---
 layout: post
 title:      "Recipe Costs JavaScript and Rails App"
-date:       2019-12-18 01:12:22 +0000
+date:       2019-12-17 20:12:23 -0500
 permalink:  recipe_costs_javascript_and_rails_app
 ---
 
@@ -11,8 +11,9 @@ Professional kitchens need to know their recipe costs to profitably price their 
 ## App Features
 - Recipe costs are calculated per recipe and per serving. 
 - Ingredient conversions are automatic. Recipe amounts entered as cups will  seamlessly take advantage of costs entered as liters or gallons, for example.
-- App-wide ingredients provide fast recipe creation, and users can modify and add new ingredients.
+- App-wide ingredients provide fast recipe creation. Users can modify and add new ingredients.
 - All recipes are browsable.
+
 ## Users and Dependencies
 I decided to build this app on top of my previous Rails student project, thinking it would provide more time to perfect the JavaScript portion of the app.
 
