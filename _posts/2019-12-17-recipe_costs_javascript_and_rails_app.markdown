@@ -9,7 +9,7 @@ permalink:  recipe_costs_javascript_and_rails_app
 Professional kitchens need to know their recipe costs to profitably price their food. My [JavaScript](https://github.com/aparkening/recipe_costs_frontend) and [Rails](https://github.com/aparkening/recipe_costs_api) student project, _Recipe Costs_, makes it easy to determine both the full cost and cost per serving of each recipe.
  
 ## App Features
-- Recipe total costs are automatically calculated once ingredients are added. If servings are entered, cost per serving is also calculated.
+- Recipe cost is automatically calculated once ingredients are added. If servings are entered, cost per serving is also calculated.
 - Ingredient conversions are automatic. Recipe amounts entered as cups will seamlessly take advantage of costs entered as liters or gallons, for example.
 - App-wide ingredients provide fast recipe creation. Users can create, modify, and delete ingredients.
 - Recipes can be easily created, modified, and deleted.
