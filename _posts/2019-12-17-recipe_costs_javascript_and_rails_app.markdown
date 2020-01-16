@@ -28,7 +28,7 @@ I returned to the planning stage, determining functionality that would solve the
 With a minimal Rails API under my belt, I was _finally_ able to jump into the JavaScript work. The frontend work was fairly straightforward at that point, so I was able to finish the MVP project within the deadline. But! With less than a week of coding time, I had very little time to explore the JavaScript. Using my previous project as a starting point completely backfired!
 
 ## Lessons Learned
-I was initially excited to show off an app with many bells and whistles around users; very much above and beyond the actual project requirements. The final product ended up smaller and tighter, hitting all the the project requirements while allowing room to expand. Along the way, I learned several important lessons:
+I was initially excited to show off an app with many bells and whistles around users; very much above and beyond the actual project requirements. The final product ended up smaller and tighter, hitting all the the project requirements with room to expand. Along the way, I learned several important lessons:
 1. Stick with code that solves the problem. _Then_ add bells and whistles if time permits.
 2. Ask for help sooner. Solving problems on my own is great, but exhausting all other options before asking for help wastes needless time.
 3. It's okay to refocus. It's healthy to stop going down a path that isn't working, and helpful to take what I learned to move down a new path.
