@@ -1,44 +1,120 @@
 ---
 layout: post
 title:      "Visit More Parks React and Rails App"
-date:       2020-02-29 05:28:21 +0000
+date:       2020-02-29 00:28:22 -0500
 permalink:  visit_more_parks_react_and_rails_app
 ---
 
-- Draft -
 
-Wouldn't it be great if you could see all nearby United States national parks when you're reviewing upcoming travel plans? My [React](https://github.com/aparkening/visit-more-parks-frontend) and [Rails](https://github.com/aparkening/visit-more-parks-backend) student project, _Visit More Parks_, scans your upcoming Google Calendar events, suggests parks that are within 100 miles of each destination, and allows you to easily create a calendar event to visit a specific park, including relevant park information as calendar data. You can also browse all National Park Service parks and highlight parks to visit in the future.
+Wouldn't it be great if you could see National Parks that are close to places you're already visiting in the US? My [React](https://github.com/aparkening/visit-more-parks-frontend) and [Rails](https://github.com/aparkening/visit-more-parks-backend) student project, _Visit More Parks_, scans your upcoming Google Calendar events, geocodes locations for those events, and suggests parks that are within 100 miles of each destination. Taking advantage of the suggestions, the app also makes it easy to add a park visit to your calendar.
  
-## App Features
-- Users log in with their Google Calendar account.
-- All U.S. National Parks are pre-loaded with geocoded coordinates and addresses using the nps.gov parks API and the Geocoder Ruby gem.
-- Each upcoming event with a United States location are automatically matched with parks that are within 100 miles.
-- Events created in the app automatically includes park information, such as description, address, and URL.
-- Events that are created, modified, and deleted within the app automatically synchronize with Google Calendar.
-- Users can browse all parks and favorite parks they wish to visit in the future.
+## What It Does
+- The user logs in with their Google Calendar account.
+- US National Parks are pre-loaded with geocoded coordinates and addresses (using the [NPS.gov Parks API](https://www.nps.gov/subjects/developer/index.htm) and the [Geocoder Ruby gem](https://github.com/alexreisner/geocoder)).
+- Upcoming calendar events are geocoded and displayed with their nearby parks.
+- The user can add (as well as modify or delete) visits to any of the parks as calendar events.
+- Those new events include park information, such as description, address, and URL.
+- All 497 National Parks are browsable.
 
 ## Why
-As a final student project, I wanted to pull in real-world complexity by interacting with multiple data sources, using Oauth to authenticate with an external provider, and actually write and update resources on another service.
+As a final student project, I wanted to try integrating and manipulating multiple data sources within a single cohesive app. I also wanted to allow users to interact with their own Google information outside of a Google-specific app and without logging in fresh every time.
 
-The National Park Service has an HTTP-based API that returns robust, but straightforward JSON data. The difficult part came when interacting with Google's Calendar API, a much more complex data stream that requires a persistent authorization token and has several methods for interacting with calendars and events. 
+The National Park Service has an HTTP-based API that returns robust, straightforward JSON data. Google Calendar has a complex API, involving persistent authorization tokens, multiple interaction methods, and variability within returned data. That's a lot to tackle! 
 
-## Not the Easy One
-The latest, fastest, and most supported, method of using Google's Calendar API is with Google's very robust [JavaScript browser client](https://github.com/google/google-api-javascript-client), also known as `gapi`. But! My project required 1) a Rails backend that persisted data, and 2) a React frontend that displayed data with minimal data manipulation. Using JavaScript as middleware to grab Google Calendar data, process it, and send along to the Rails server didn't make much sense with those project requirements, so I investigated further. 
+## Finding the Right Calendar API
+The latest, fastest, and best-supported method of using Google's Calendar API is with Google's robust [JavaScript browser client](https://github.com/google/google-api-javascript-client), also known as `gapi`. The requirements for my project specified a Rails backend to persist data and a React frontend that _minimally_ manipulated data, so using JavaScript/React as middleware to manipulate Google Calendar data and then send the data along to a Rails server didn't make much sense. What I really wanted was a way for Rails to grab and process all the data and simply supply React with some easy JSON feeds.
 
-Luckily, Google also created a [Ruby API client](https://github.com/googleapis/google-api-ruby-client). It won't receive any new features, but it's still officially maintained and has some documentation. The good news is that I could incorporate a Ruby on Rails-native client into my project! The bad news is that the documentation was written for _all_ Google services, so it was difficult to glean what applied to my situation, it didn't clearly illustrate how to securely deal with authenticating credentials between requests, and the examples were confusingly different between the [GitHub examples](https://github.com/googleapis/google-api-ruby-client/blob/master/samples/cli/lib/samples/calendar.rb) and the official website [API reference examples](https://developers.google.com/calendar/v3/reference/events/insert). When confused about how to interact with the ruby client, I dove directly into the [service file](https://github.com/googleapis/google-api-ruby-client/blob/b9e9a8e2b8dd45d0ad3cd7937a8cb39ea52f9c36/generated/google/apis/calendar_v3/service.rb#L1174) to see how each method was created and documented.
+Luckily, Google also created a [Ruby API client](https://github.com/googleapis/google-api-ruby-client). It's not as robustly documented as the Javascript browser client, but it _is_ still officially maintained for big fixes and does have _some_ documentation! 
 
-## Solution
+## Persistent Authentication
+My excitement quickly wore off when I realized the Ruby API and documentation applied to _all_ Google services. I found it difficult to glean what was relevant to my situation, especially regarding authentication credentials between requests. 
 
-I first tackled Oauth and Google by reading many tutorials. A couple handy articles were [_Google OAuth for Ruby On Rails_](https://medium.com/@amoschoo/google-oauth-for-ruby-on-rails-129ce7196f35) and [_Using The Google API Ruby Client with Google Calendar API_](https://www.thegreatcodeadventure.com/using-the-google-api-ruby-client-with-google-calendar-api/).
-
-Most articles used Devise to handle of authorization details, but I wanted a more light-weight solution, so I built my own re-usable methods for reading, creating, updating, and destroying events.
+Combing through a ton of online resources, I found a couple articles that outlined some helpful approaches to refreshing authorization: [_Google OAuth for Ruby On Rails_](https://medium.com/@amoschoo/google-oauth-for-ruby-on-rails-129ce7196f35) and [_Using The Google API Ruby Client with Google Calendar API_](https://www.thegreatcodeadventure.com/using-the-google-api-ruby-client-with-google-calendar-api/). The key to successful authorization was to initialize a new Google Calendar each time my controller created, read, updated, or destroyed a calendar event. So I created some helper methods patterned after the calendar_list approach from _Google OAuth for Ruby On Rails_. 
 
 ```
-require 'google/api_client/client_secrets.rb'
-require 'google/apis/calendar_v3'
+  # Start and authorize new calendar service
+  def start_google_service
+    # Initialize Google Calendar API
+    service = Google::Apis::CalendarV3::CalendarService.new
+    
+    # Use google keys to authorize
+    service.authorization = google_secret.to_authorization
+    
+    # Request new access token in case it expired
+    service.authorization.refresh!
 
-class Api::V1::EventsController < ApplicationController
-  before_action :authenticate
+    return service
+  end
+
+  # Tokens and client env variables
+  def google_secret
+    Google::APIClient::ClientSecrets.new(
+      { "web" =>
+        { "access_token" => current_user.google_token,
+          "refresh_token" => current_user.google_refresh_token,
+          "client_id" => ENV['GOOGLE_CLIENT_ID'],
+          "client_secret" => ENV['GOOGLE_CLIENT_SECRET']
+        }
+      }
+    )
+  end
+```
+
+## Interacting with Google Calendar
+Once I understood how to authenticate each Google Calendar request, I needed to actually create, read, update, and destroy events. The official examples only covered a couple interaction scenarios and were also confusingly different between the [GitHub versions](https://github.com/googleapis/google-api-ruby-client/blob/master/samples/cli/lib/samples/calendar.rb) and the [website API versions](https://developers.google.com/calendar/v3/reference/events/insert). 
+
+After unsuccessful attempts to expand the canned interaction examples, I dove directly into the API client code to understand the available methods and their expected parameters. The [service file](https://github.com/googleapis/google-api-ruby-client/blob/b9e9a8e2b8dd45d0ad3cd7937a8cb39ea52f9c36/generated/google/apis/calendar_v3/service.rb#L1174) provided the gold I needed: all the interaction methods _and_ code comments listing their required parameters!
+
+Using my newfound knowledge, I was able to create additional helper methods to grab existing event lists and format Google-friendly events.
+
+```  
+  # Return hash of Google events
+  def get_google_events
+    calendar = start_google_service
+    
+    # Set calendar ('primary' is main Google account)
+    calendar_id = "primary"
+
+    # Get up to 1000 events in calendar
+    events = calendar.list_events(
+      calendar_id,
+      max_results: 1000,
+      single_events: true,
+      order_by: "startTime",
+      time_min: DateTime.now.rfc3339
+    )
+    
+    # Convert event list into hash
+    return JSON.parse(events.to_json)
+  end
+  
+	# Return event hash in Google-friendly format  
+	def format_google_event(event)
+    Google::Apis::CalendarV3::Event.new(
+      summary: event.title,
+      location: event.location,
+      description: event.description,
+      start: Google::Apis::CalendarV3::EventDateTime.new(
+        date_time: event.start_time,
+        time_zone: event.timezone
+      ),
+      end: Google::Apis::CalendarV3::EventDateTime.new(
+        date_time: event.end_time,
+        time_zone: event.timezone
+      )
+    )
+  end
+end
+```
+
+Using the authentication and events helpers, my index, create, update, and delete methods became nicely straightforward:
+```
+# events_controller.rb
+
+	require 'google/api_client/client_secrets.rb'
+	require 'google/apis/calendar_v3'	
+	class Api::V1::EventsController < ApplicationController
+	  before_action :authenticate
 
   # All events
   def index
@@ -47,16 +123,7 @@ class Api::V1::EventsController < ApplicationController
 
     ### Sample output
     # location_names = location_hash.each{|e| puts e["summary"] +" - "+ e["location"]}
-    # Output: 
-    # Boston Trip - Boston, MA
-    # Minneapolis Trip - Minneapolis, MN
-    # Austin Trip - Austin, TX
-    # Portland Trip - Portland, OR
-    # Virginia Trip - Falls Church, VA
-
-    ### Sample geocode usage
-    # g = Geocoder.search("Boston, MA")
-    # g.first.coordinates #=> [42.3602534, -71.0582912]
+    # location_name: Boston Trip - Boston, MA
 
     # Add array of parks within 100 miles to each location
     events_and_parks = location_hash.each{|event| event["nearParks"]= Park.near(event["location"], 100).as_json}
@@ -65,49 +132,23 @@ class Api::V1::EventsController < ApplicationController
     render json: { events: events_and_parks }
   end
 
-
-  # Display record
-  def show
-    event = Event.find_by(id: params[:id])
-
-    if event
-      # Render json
-      render json: { event: event }
-    else
-      not_found
-    end
-  end
-
-
   # Create record
   def create
     event = current_user.events.build(event_params)
 
-    # If event can save, also send to Google Calendar
+    # If event can save to database, also send to Google Calendar
     if event.save
 
       # Start Google calendar
       calendar = start_google_service
 
       # Format event for Google
-      g_event = Google::Apis::CalendarV3::Event.new(
-        summary: event.title,
-        location: event.location,
-        description: event.description,
-        start: Google::Apis::CalendarV3::EventDateTime.new(
-          date_time: event.start_time,
-          time_zone: event.timezone
-        ),
-        end: Google::Apis::CalendarV3::EventDateTime.new(
-          date_time: event.end_time,
-          time_zone: event.timezone
-        )
-      )
+			g_event = format_google_event(event)
 			
-			# Add Google Calendar event
+			# Add event to Google Calendar
       result = calendar.insert_event('primary', g_event)
 
-			# Add Google Calendar id to event table
+			# Add Google Calendar id to database
       event.g_cal_id = result.id
       event.save
 
@@ -161,57 +202,13 @@ class Api::V1::EventsController < ApplicationController
     # Render json
     render json: { event: event.id}
   end
-
+  
   private
+  
+  # helper methods
 
-  def event_params
-		params.require(:event).permit(:title, :location, :description, :start_time, :end_time, :timezone, :user_id, :park_id)
-  end
-
-  # Start calendar service and authorize use
-  def start_google_service
-    # Initialize Google Calendar API
-    service = Google::Apis::CalendarV3::CalendarService.new
-    # Use google keys to authorize
-    service.authorization = google_secret.to_authorization
-    # Request new access token in case it expired
-    service.authorization.refresh!
-
-    return service
-  end
-
-  # Tokens and client env variables
-  def google_secret
-    Google::APIClient::ClientSecrets.new(
-      { "web" =>
-        { "access_token" => current_user.google_token,
-          "refresh_token" => current_user.google_refresh_token,
-          "client_id" => ENV['GOOGLE_CLIENT_ID'],
-          "client_secret" => ENV['GOOGLE_CLIENT_SECRET']
-        }
-      }
-    )
-  end
-
-  # Return hash of google events
-  def get_google_events
-    calendar = start_google_service
-    
-    # Set calendar
-    # Primary is main account
-    calendar_id = "primary"
-
-    # Get up to 1000 events in calendar
-    events = calendar.list_events(
-      calendar_id,
-      max_results: 1000,
-      single_events: true,
-      order_by: "startTime",
-      time_min: DateTime.now.rfc3339
-    )
-    
-    # Convert event list into hash
-    return JSON.parse(events.to_json)
-  end
 end
 ```
+
+## Finding Answers in Articles and Code
+Reading about other people's experiences and directly diving into the Ruby code was much more valuable than slogging through the confusing official Google Calendar API documentation. Where the documentation lacked, external resources illustrated robust approaches and gave me hope that my own app could work. And reading the API methods provided the needed interaction requirements while showing me the product wasn't nearly as complicated as it seemed. Now users can seamlessly interact with Google Calendar through my app!
